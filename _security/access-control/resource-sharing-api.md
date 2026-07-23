@@ -34,10 +34,16 @@ The following table lists the available request body fields.
 | Field | Data type | Description |
 | :--- | :--- | :--- |
 | `source_index` | String | The source index containing legacy sharing metadata. Required. |
-| `username_path` | String | A JSON path to the owner name (for example, `/owner/name`). Required. |
-| `backend_roles_path` | String | A JSON path to backend roles (for example, `/owner/backend_roles`). Required. |
+| `username_path` | String | A JSON path to the owner name (for example, `/owner/name`). Required. Serves as the default when a resource provider does not declare a per-type override. |
+| `backend_roles_path` | String | A JSON path to backend roles (for example, `/owner/backend_roles`). Required. Serves as the default when a resource provider does not declare a per-type override. |
 | `default_owner` | String | The default owner for resources without explicit ownership. Required. |
 | `default_access_level` | Object | The default access levels by resource type. Add additional entries if the resource index contains multiple resource types. Required. |
+
+### Owner paths and multiple resource types per index
+
+Plugins that register multiple `ResourceProvider`s on the same index may store owner metadata under different JSON paths for each type (for example, `monitor.user.name` versus `workflow.user.name`). Each provider can declare its own `ownerNamePath()` and `ownerBackendRolesPath()`; when set, those paths take precedence over the request-level `username_path` and `backend_roles_path` for documents of that type. The request-level paths remain required and are used as the fallback when a provider does not declare per-type paths.
+
+Documents that the framework cannot classify by type (for example, unrelated records living on the same index) are recorded under `skippedResources` in the response and do not fail the migration.
 
 ### Example request
 
@@ -74,7 +80,7 @@ The following table lists all response body fields.
 | :--- | :--- | :--- |
 | `summary` | String | A summary message describing the migration results, including counts of migrated, skipped, and failed resources. |
 | `resourcesWithDefaultOwner` | Array | A list of resource IDs that were assigned the default owner because no owner information was found. |
-| `skippedResources` | Array | A list of resource IDs that were skipped during migration (for example, missing type information or already migrated). |
+| `skippedResources` | Array | A list of resource IDs that were skipped during migration (for example, unclassifiable by type or already migrated). |
 
 ### Required permissions
 
