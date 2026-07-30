@@ -9,9 +9,6 @@ nav_order: 55
 **Introduced 3.3**
 {: .label .label-purple }
 
-This is an experimental feature and is not recommended for use in a production environment. For updates on the progress of the feature or if you want to leave feedback, join the discussion on the [OpenSearch forum](https://forum.opensearch.org/).    
-{: .warning}
-
 Resource sharing in OpenSearch Dashboards provides fine-grained, document-level access control for plugin-defined resources such as machine learning (ML) model groups, anomaly detectors, report definitions, and other shareable objects. This feature extends OpenSearch's role-based access control by allowing resource owners to specify who can access a resource and what level of access they have, including read-only or read-write permissions. OpenSearch Dashboards offers a simple UI for everyday access management, while the Dev Tools console enables automation or batch operations for advanced workflows. 
 
 If resource sharing features are not visible in OpenSearch Dashboards, contact your OpenSearch administrator to enable the capability and assign appropriate permissions.
@@ -43,13 +40,11 @@ To use resource sharing in OpenSearch Dashboards, you must fulfill the following
 * **Resource-level sharing access**: The resource must be explicitly shared with you unless you are the owner or a superadmin.
 * **Security plugin settings enabled**: Administrators must enable the following in the configuration:
     ```yaml
-    plugins.security.experimental.resource_sharing.enabled: true
-    plugins.security.experimental.resource_sharing.protected_types: ["<resource-type>"]
+    plugins.security.resource_sharing.enabled: true
+    plugins.security.resource_sharing.protected_types: ["<resource-type>"]
     plugins.security.system_indices.enabled: true
     ```
     {% include copy.html %}
-
-    For more information, see [Experimental feature flags]({{site.url}}{{site.baseurl}}/install-and-configure/configuring-opensearch/experimental/).
 
 ## Sharing resources using OpenSearch Dashboards
 
